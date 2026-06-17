@@ -22,6 +22,46 @@ The project evolved from a pricing engine into a complete research workflow incl
 - Interactive Streamlit Dashboard
 
 ---
+
+## Live Application
+
+The project is deployed as an interactive Streamlit dashboard and can be accessed here:
+
+🔗 **Live Demo:** https://option-pricing-volatility-engine-89zfnt4sfzkwwrur5z7mgo.streamlit.app/
+
+### Dashboard Modules
+
+#### 1. Option Analytics
+- Black-Scholes Option Pricing
+- Greeks Calculation (Delta, Gamma, Vega, Theta, Rho)
+- Interactive parameter controls
+- Real-time pricing updates
+
+#### 2. Volatility Forecasting
+- Historical Volatility
+- EWMA Volatility Forecasting
+- GARCH(1,1) Volatility Modeling
+- Comparative volatility analysis
+
+#### 3. Machine Learning Forecasting
+- Random Forest Volatility Forecasting
+- XGBoost Volatility Forecasting
+- Feature Importance Analysis
+- Model Performance Comparison
+
+#### 4. Volatility Trading Strategies
+- Volatility Risk Premium Strategy
+- Forecast Spread Strategy
+- Backtesting Framework
+- Performance Metrics (Sharpe Ratio, Drawdown, Win Rate, Annual Return)
+
+#### 5. Regime Analysis
+- Volatility Regime Classification
+- Regime Distribution Analysis
+- Regime-Based Strategy Filtering
+- Transition Analysis
+
+
 ## Dashboard Preview
 
 ### Home Page
@@ -218,6 +258,7 @@ The platform includes a multi-page Streamlit dashboard.
 
 ---
 
+
 ## Installation
 
 Clone the repository:
@@ -246,15 +287,15 @@ streamlit run app.py
 ## Technologies Used
 
 - Python
+- Stramlit
 - NumPy
 - Pandas
-- SciPy
-- Matplotlib
 - Scikit-Learn
 - XGBoost
 - ARCH
-- Yahoo Finance API
-- Streamlit
+- yfinance
+- matplotlib
+- plotly
 
 ---
 
