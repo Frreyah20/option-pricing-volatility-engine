@@ -32,7 +32,11 @@ def build_ml_dataset(prices):
 def train_random_forest(df):
     X = df[["ret_1d", "ret_5d", "ret_21d", "hist_vol", "ewma_vol", "garch_vol"]]
     y = df["future_vol"]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle = False)
+    split_idx = int(len(X) * 0.8)
+    # Purge 20 observations from the end of the training set to prevent overlapping outcomes leakage
+    # This prevents the model from peeking into the strictly unknown test set future.
+    X_train, X_test = X.iloc[:split_idx - 20], X.iloc[split_idx:]
+    y_train, y_test = y.iloc[:split_idx - 20], y.iloc[split_idx:]
     model = RandomForestRegressor(n_estimators=200, random_state=42)
     model.fit(X_train, y_train)
     preds = model.predict(X_test)
@@ -65,7 +69,11 @@ def plot_feature_importance(model, feature_names):
 def train_xgboost(df):
     X = df[["ret_1d", "ret_5d", "ret_21d", "hist_vol", "ewma_vol", "garch_vol"]]
     y = df["future_vol"]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, shuffle = False)
+    split_idx = int(len(X) * 0.8)
+    # Purge 20 observations from the end of the training set to prevent overlapping outcomes leakage
+    # This prevents the model from peeking into the strictly unknown test set future.
+    X_train, X_test = X.iloc[:split_idx - 20], X.iloc[split_idx:]
+    y_train, y_test = y.iloc[:split_idx - 20], y.iloc[split_idx:]
     model = XGBRegressor(n_estimators = 200,max_depth = 4, learning_rate = 0.05, random_state=42)
     model.fit(X_train, y_train)
     preds = model.predict(X_test)
