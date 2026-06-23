@@ -2,11 +2,11 @@
 
 ## Overview
 
-This project is a quantitative research platform for option pricing, volatility modeling, machine learning-based volatility forecasting, and systematic volatility trading strategies.
+This project is a quantitative research platform for option pricing, volatility modeling, volatility forecasting, and systematic strategy evaluation.
 
-The platform combines classical derivatives pricing techniques with modern statistical and machine learning methods to analyze, forecast, and trade market volatility.
+The platform combines classical derivatives pricing techniques with statistical and machine learning methods to analyze option markets, forecast volatility, and evaluate volatility-informed trading strategies.
 
-The project evolved from a pricing engine into a complete research workflow including:
+The project evolved from a pricing engine into a broader research workflow covering:
 
 - Option Pricing
 - Greeks Analytics
@@ -15,11 +15,53 @@ The project evolved from a pricing engine into a complete research workflow incl
 - Volatility Smile & Skew Analysis
 - Volatility Surface Construction
 - Volatility Forecasting
-- Machine Learning Models
+- Forecast Model Benchmarking
 - Walk-Forward Validation
-- Systematic Trading Strategies
+- Strategy Backtesting
+- Cost Sensitivity Analysis
 - Volatility Regime Analysis
 - Interactive Streamlit Dashboard
+
+---
+
+## Key Results
+
+### Forecast Benchmark Comparison
+
+A formal out-of-sample benchmark was conducted to compare classical volatility models against machine learning approaches.
+
+| Model | RMSE |
+|----------|----------:|
+| GARCH | 0.110108 |
+| EWMA | 0.119561 |
+| Historical Volatility | 0.121288 |
+| XGBoost | 0.126105 |
+| Random Forest | 0.129947 |
+
+**Observation:** Under the selected dataset, feature set, and evaluation framework, GARCH achieved the lowest forecasting error among the models tested. The machine learning models captured some volatility dynamics but did not outperform the strongest classical baseline on this prediction horizon.
+
+### Cost Sensitivity Analysis
+
+Strategy performance was evaluated under increasing execution slippage assumptions.
+
+| Slippage (bps) | Sharpe Ratio | Annual Return | Max Drawdown |
+|----------|----------:|----------:|----------:|
+| 0 | 2.248 | 36.13% | -7.88% |
+| 5 | 1.957 | 30.82% | -9.48% |
+| 10 | 1.668 | 25.72% | -11.20% |
+| 20 | 1.096 | 16.08% | -18.01% |
+
+**Observation:** Strategy performance deteriorates as execution costs increase, highlighting the importance of realistic transaction cost assumptions during backtesting.
+
+### Validation Improvements
+
+The forecasting framework uses:
+
+- Expanding-window walk-forward validation
+- Purged train/test splits
+- 20-day embargo period to prevent overlapping-outcomes leakage
+
+This ensures that forecasting performance is evaluated using strictly out-of-sample observations.
 
 ---
 
@@ -29,38 +71,46 @@ The project is deployed as an interactive Streamlit dashboard and can be accesse
 
 🔗 **Live Demo:** https://option-pricing-volatility-engine-89zfnt4sfzkwwrur5z7mgo.streamlit.app/
 
-### Dashboard Modules
+---
 
-#### 1. Option Analytics
+## Dashboard Modules
+
+### 1. Option Analytics
+
 - Black-Scholes Option Pricing
 - Greeks Calculation (Delta, Gamma, Vega, Theta, Rho)
 - Interactive parameter controls
 - Real-time pricing updates
 
-#### 2. Volatility Forecasting
+### 2. Volatility Forecasting
+
 - Historical Volatility
 - EWMA Volatility Forecasting
 - GARCH(1,1) Volatility Modeling
 - Comparative volatility analysis
 
-#### 3. Machine Learning Forecasting
+### 3. ML Volatility Forecasting
+
 - Random Forest Volatility Forecasting
 - XGBoost Volatility Forecasting
 - Feature Importance Analysis
 - Model Performance Comparison
 
-#### 4. Volatility Trading Strategies
+### 4. Trading Strategies
+
 - Volatility Risk Premium Strategy
 - Forecast Spread Strategy
 - Backtesting Framework
 - Performance Metrics (Sharpe Ratio, Drawdown, Win Rate, Annual Return)
 
-#### 5. Regime Analysis
+### 5. Regime Analysis
+
 - Volatility Regime Classification
 - Regime Distribution Analysis
 - Regime-Based Strategy Filtering
 - Transition Analysis
 
+---
 
 ## Dashboard Preview
 
@@ -88,6 +138,7 @@ The project is deployed as an interactive Streamlit dashboard and can be accesse
 
 ![Regime Analysis](screenshots/6.png)
 
+---
 
 ## Project Architecture
 
@@ -101,7 +152,6 @@ option_pricing_volatility_engine/
 ├── backtests/
 ├── research/
 ├── surface/
-├── visualization/
 ├── data/
 ├── pages/
 ├── experiments/
@@ -120,12 +170,12 @@ option_pricing_volatility_engine/
 Implemented:
 
 - Black-Scholes Option Pricing
-- European Call Pricing
+- European Option Pricing
 - Put-Call Parity Validation
 
 ### Greeks & Risk Analytics
 
-Implemented analytical and finite-difference Greeks:
+Implemented:
 
 - Delta
 - Gamma
@@ -151,7 +201,7 @@ Implemented:
 
 Market option prices can be converted into implied volatility estimates.
 
-### Volatility Research
+### Volatility Analytics
 
 Implemented:
 
@@ -170,7 +220,7 @@ Implemented:
 
 ### Machine Learning Forecasting
 
-Feature set:
+Feature Set:
 
 - 1-Day Returns
 - 5-Day Returns
@@ -184,11 +234,7 @@ Models:
 - Random Forest Regressor
 - XGBoost Regressor
 
-### Walk-Forward Validation
-
-Implemented expanding-window walk-forward testing to evaluate forecasting performance under realistic market conditions.
-
-### Volatility Trading Strategies
+### Trading Strategies
 
 Implemented:
 
@@ -196,15 +242,17 @@ Implemented:
 
 Signal generated from:
 
-IV − Realized Volatility
+```text
+Implied Volatility - Realized Volatility
+```
 
 #### Forecast Spread Strategy
 
 Signal generated from:
 
-IV − Forecast Volatility
-
-Performance evaluated through transaction-cost-aware backtesting.
+```text
+Implied Volatility - Forecast Volatility
+```
 
 ### Regime Analysis
 
@@ -222,25 +270,17 @@ Research included:
 
 ---
 
-## Key Results
+## Validation Methodology
 
-### Walk-Forward XGBoost Strategy
+### Walk-Forward Evaluation
 
-| Metric | Value |
-|----------|----------:|
-| Sharpe Ratio | 2.161 |
-| Maximum Drawdown | -10.8% |
-| Win Rate | 51.1% |
-| Annual Return | 34.5% |
+Forecasting models are evaluated using an expanding-window walk-forward framework that simulates historical deployment.
 
-### Regime Filtered Strategy
+### Purged Validation
 
-| Metric | Original | Filtered |
-|----------|----------:|----------:|
-| Sharpe Ratio | 2.05 | 2.29 |
-| Maximum Drawdown | -24.5% | -7.3% |
+A 20-day purge is applied between training and testing windows to prevent overlapping-outcomes leakage.
 
-Filtering out high-volatility environments improved risk-adjusted performance while significantly reducing drawdowns.
+The forecasting target uses a 21-day forward volatility horizon. Without a purge, observations near the train-test boundary can inadvertently incorporate information from the testing period, artificially inflating model performance.
 
 ---
 
@@ -258,6 +298,20 @@ The platform includes a multi-page Streamlit dashboard.
 
 ---
 
+## Technologies Used
+
+- Python
+- Streamlit
+- NumPy
+- Pandas
+- SciPy
+- Scikit-Learn
+- XGBoost
+- ARCH
+- yfinance
+- Matplotlib
+
+---
 
 ## Installation
 
@@ -267,7 +321,7 @@ Clone the repository:
 git clone <repository-url>
 cd option_pricing_volatility_engine
 ```
- 
+
 Install dependencies:
 
 ```bash
@@ -284,18 +338,27 @@ streamlit run app.py
 
 ---
 
-## Technologies Used
+## Run Experiments
 
-- Python
-- Stramlit
-- NumPy
-- Pandas
-- Scikit-Learn
-- XGBoost
-- ARCH
-- yfinance
-- matplotlib
-- plotly
+Forecast Benchmark:
+
+```bash
+python -m experiments.benchmark_test
+```
+
+Cost Sensitivity Analysis:
+
+```bash
+python -m experiments.cost_sensitivity
+```
+
+---
+
+## Limitations
+
+- Uses end-of-day Yahoo Finance data rather than intraday market data.
+- Volatility surface construction currently relies on interpolation rather than calibrated models such as SABR or SVI.
+- Strategy backtests use underlying asset returns as a proxy for volatility-informed allocation decisions rather than a fully delta-hedged options portfolio.
 
 ---
 
@@ -304,16 +367,13 @@ streamlit run app.py
 Potential extensions include:
 
 - EGARCH and GJR-GARCH Models
+- SABR Volatility Smile Calibration
 - Heston Stochastic Volatility Model
-- LSTM-Based Volatility Forecasting
-- Transformer Time-Series Models
-- Real-Time Option Data Integration
-- Portfolio-Level Volatility Trading
-- Cloud Deployment
+- Delta-Hedged Options Backtesting
+- Portfolio-Level Volatility Strategies
 
 ---
 
 ## Author
 
 Frreyah
-
